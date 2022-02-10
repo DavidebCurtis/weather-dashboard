@@ -5,6 +5,7 @@ var tempEl = document.getElementById("temp");
 var windEl = document.getElementById("wind");
 var humidityEl = document.getElementById("humidity");
 var uVIndexEl = document.getElementById("uv-index");
+var dailyEl = document.getElementById("daily-row");
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
@@ -57,9 +58,10 @@ var getCityWeather = function (cityname) {
     if (response.ok) {
       response.json().then(function (data) {
         console.log(data);
+        var date = moment().format("l");
         var lat = data.coord.lat;
         var lon = data.coord.lon;
-        cityNameEl.innerHTML = data.name;
+        cityNameEl.innerHTML = data.name + " " + "(" + date + ")";
         fetch(
           "https://api.openweathermap.org/data/2.5/onecall?lat=" +
             lat +
