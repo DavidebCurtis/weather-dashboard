@@ -1,11 +1,5 @@
 var searchFormEl = document.getElementById("search-form");
 var cityInputEl = document.getElementById("city");
-// var cityNameEl = document.getElementById("city-name-header");
-// var tempEl = document.getElementById("temp");
-// var windEl = document.getElementById("wind");
-// var humidityEl = document.getElementById("humidity");
-// var uVIndexEl = document.getElementById("uv-index");
-var dailyEl = document.getElementById("daily-row");
 
 var date = moment().format("l");
 
@@ -13,7 +7,6 @@ var formSubmitHandler = function (event) {
   event.preventDefault();
 
   var cityname = cityInputEl.value.trim();
-  console.log(cityname);
 
   if (cityname) {
     getCityWeather(cityname);
@@ -51,15 +44,21 @@ let displayCityWeather = function () {
   ).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        console.log(data);
+        fiveDayData = data;
         $("#city-name-header").text(cityName + " (" + date + ")");
         $("#temp").text("Temp: " + data.current.temp + " Fahrenheit");
         $("#wind").text("Wind: " + data.current.wind_speed + " MPH");
         $("#humidity").text("Humidity: " + data.current.humidity + " %");
         $("#uv-index").text("UV Index: " + data.current.uvi);
+        displayFiveDay();
+        return fiveDayData;
       });
     }
   });
+};
+
+let displayFiveDay = function () {
+  console.log(fiveDayData);
 };
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
