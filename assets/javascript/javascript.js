@@ -1,8 +1,6 @@
 var searchFormEl = document.getElementById("search-form");
 var cityInputEl = document.getElementById("city");
 
-var date = moment().format("l");
-
 var formSubmitHandler = function (event) {
   event.preventDefault();
 
@@ -45,20 +43,62 @@ let displayCityWeather = function () {
     if (response.ok) {
       response.json().then(function (data) {
         fiveDayData = data;
-        $("#city-name-header").text(cityName + " (" + date + ")");
+        $("#city-name-header").text(
+          cityName + " (" + moment().format("l") + ")"
+        );
         $("#temp").text("Temp: " + data.current.temp + " Fahrenheit");
         $("#wind").text("Wind: " + data.current.wind_speed + " MPH");
         $("#humidity").text("Humidity: " + data.current.humidity + " %");
         $("#uv-index").text("UV Index: " + data.current.uvi);
         displayFiveDay();
+        console.log(fiveDayData);
         return fiveDayData;
       });
     }
   });
 };
 
+// let displayFiveDay = function () {
+//   let i = fiveDayData.daily;
+//   let index = 0;
+//   i.forEach((day) => {
+//     const dayContainer = document.createElement("div");
+
+//     const temp = fiveDayData.daily[index].temp.day;
+//     const tempElem = document.createElement("div");
+//     tempElem.innerText = Math.round(temp) + "°F";
+//     dayContainer.appendChild(tempElem);
+
+//     $("#daily-row").append(dayContainer);
+//   });
+// };
+
 let displayFiveDay = function () {
-  console.log(fiveDayData);
+  for (let index = 0; index < fiveDayData.daily.length; index++) {
+    console.log(fiveDayData.daily[index]);
+    let i = fiveDayData.daily[index];
+
+    // create card
+    let card = document.createElement("div");
+    card.setAttribute("id", index);
+    card.classList.add("weather-card");
+
+    const temp = fiveDayData.daily[index].temp.day;
+    const tempElem = document.createElement("div");
+    tempElem.innerText = Math.round(temp) + "°F";
+    card.appendChild(tempElem);
+
+    $("#daily-row").append(card);
+    if (index === 4) {
+      return;
+    }
+  }
 };
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
+
+// $("#0 #day-header").text(cityName);
+// $("#1 #day-header").text(cityName);
+// $("#2 #day-header").text(cityName);
+// $("#3 #day-header").text(cityName);
+// $("#4 #day-header").text(cityName);
