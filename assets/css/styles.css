@@ -96,3 +96,7 @@ body {
   background-color: rgb(52, 48, 63);
   color: white;
 }
+
+.icon {
+  max-width: 55px;
+}
