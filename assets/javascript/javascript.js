@@ -1,5 +1,11 @@
 var searchFormEl = document.getElementById("search-form");
 var cityInputEl = document.getElementById("city");
+var searchedEl = document.getElementById("searches");
+var uI = document.getElementById("uv-index");
+var cities = JSON.parse(localStorage.getItem("cities")) || [];
+
+// loads city to recent searches
+recent();
 
 // submit handler for choosing a city
 var formSubmitHandler = function (event) {
@@ -15,23 +21,32 @@ var formSubmitHandler = function (event) {
   }
   // saves city to local storage on click
   saveCities(cityname);
-  // loads city to recent searches
-  recent();
 };
 
-// save city function
+// save city and display as recent search
 var saveCities = function (cityname) {
-  var saveCity = cityname;
-  localStorage.setItem("city", saveCity);
+  var savedCities = { city: cityname };
+  cities.push(savedCities);
+  localStorage.setItem("cities", JSON.stringify(cities));
+  const makeLI = document.createElement("li");
+  makeLI.innerText = cityname;
+  $("#searches").append(makeLI);
 };
 
-// loads recent searches function
-var recent = function () {
-  var loadCity = localStorage.getItem("city");
-  var searchEl = document.createElement("p");
-  searchEl.innerText = loadCity;
-  $("#searches").append(searchEl);
-};
+// load recent searches function
+function recent() {
+  for (let index = 0; index < cities.length; index++) {
+    const makeLI = document.createElement("li");
+    makeLI.innerText = cities[index].city;
+    $("#searches").append(makeLI);
+  }
+}
+
+// diplsay recent search weather on click
+function searched(event) {
+  event.target;
+  getCityWeather(event.target.innerText);
+}
 
 // gets city weather data and returns lat + lon + cityName to be used in displayCityWeather()
 let getCityWeather = function (cityname) {
@@ -67,8 +82,6 @@ let displayCityWeather = function () {
         $("#city-name-header").text(
           cityName + " (" + moment().format("l") + ")"
         );
-        console.log(data);
-
         // create icon and append to city name header
         var icon = data.current.weather[0].icon;
         var iconEl = document.createElement("img");
@@ -80,6 +93,22 @@ let displayCityWeather = function () {
         $("#wind").text("Wind: " + data.current.wind_speed + " MPH");
         $("#humidity").text("Humidity: " + data.current.humidity + " %");
         $("#uv-index").text("UV Index: " + data.current.uvi);
+
+        // add UI INDEX colors
+        if (data.current.uvi < 3) {
+          uI.classList.add("favorable");
+          uI.classList.remove("moderate");
+          uI.classList.remove("severe");
+        } else if (data.current.uvi > 3 && data.current.uvi < 5) {
+          uI.classList.add("moderate");
+          uI.classList.remove("severe");
+          uI.classList.remove("favorable");
+        } else
+          uI.classList.add("severe"),
+            uI.classList.remove("moderate"),
+            uI.classList.remove("favorable");
+
+        // call 5 day function
         displayFiveDay();
         return fiveDayData;
       });
@@ -142,4 +171,5 @@ let displayFiveDay = function () {
   }
 };
 
+searchedEl.addEventListener("click", searched);
 searchFormEl.addEventListener("submit", formSubmitHandler);
