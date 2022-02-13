@@ -28,17 +28,19 @@ var saveCities = function (cityname) {
   var savedCities = { city: cityname };
   cities.push(savedCities);
   localStorage.setItem("cities", JSON.stringify(cities));
-  const makeLI = document.createElement("li");
-  makeLI.innerText = cityname;
-  $("#searches").append(makeLI);
+  const cityButton = document.createElement("button");
+  cityButton.classList.add("city-button");
+  cityButton.innerText = cityname;
+  $("#searches").append(cityButton);
 };
 
 // load recent searches function
 function recent() {
   for (let index = 0; index < cities.length; index++) {
-    const makeLI = document.createElement("li");
-    makeLI.innerText = cities[index].city;
-    $("#searches").append(makeLI);
+    const makeButton = document.createElement("button");
+    makeButton.classList.add("city-button");
+    makeButton.innerText = cities[index].city;
+    $("#searches").append(makeButton);
   }
 }
 
@@ -131,14 +133,16 @@ let displayFiveDay = function () {
 
     // create card
     var card = document.createElement("div");
-    card.setAttribute("id", index);
+    // card.setAttribute("id", index);
     card.classList.add("weather-card");
 
-    // add city to card
-    var name = cityName;
-    var cityNameEl = document.createElement("h1");
-    cityNameEl.innerText = name;
-    card.appendChild(cityNameEl);
+    // add date to card
+    var todayDateEl = document.createElement("h1");
+    todayDateEl.setAttribute("id", [index + 1]);
+    var iD = todayDateEl.getAttribute("id");
+    var fiveDate = moment().add(iD, "day").format("l");
+    todayDateEl.innerText = fiveDate;
+    card.appendChild(todayDateEl);
 
     // add icon to card
     var icon = i.weather[0].icon;
