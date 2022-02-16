@@ -147,3 +147,51 @@ body {
   height: 34px;
   border-radius: 5px;
 }
+
+@media only screen and (max-width: 1040px) {
+  .body-row {
+    display: flex;
+    flex-direction: column;
+  }
+  .left-content {
+    width: 100%;
+    margin: 0.5%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .right-content {
+    width: 100%;
+    margin: 0.5%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .body-row {
+    display: flex;
+    flex-direction: column;
+  }
+  .left-content {
+    width: 100%;
+    margin: 0.5%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .right-content {
+    width: 100%;
+    margin: 0.5%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  #daily-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: start;
+  }
+}
